@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { UserCircle } from "lucide-react";
+import Image from "next/image";
 
 export default function ProfileCard({ username, exam, userClass }) {
   return (
@@ -12,8 +12,14 @@ export default function ProfileCard({ username, exam, userClass }) {
       className="bg-gray-800 p-6 rounded-2xl shadow-lg flex items-center gap-6 text-white w-full"
     >
       {/* User Icon */}
-      <div className="w-20 h-20 bg-gray-600 rounded-full flex items-center justify-center shadow-md">
-        <UserCircle size={50} className="text-white" />
+      <div className="w-20 h-20 bg-gray-600 rounded-full flex items-center justify-center shadow-md overflow-hidden">
+        <Image
+          src="/assets/avatar.png" // Adjust the path as necessary
+          alt="User Avatar"
+          width={80}
+          height={80}
+          className="rounded-full"
+        />
       </div>
 
       {/* User Info */}

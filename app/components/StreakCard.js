@@ -16,11 +16,11 @@ export default function StreakCard({ streak }) {
     >
       {/* Streak Icon */}
       <div className="relative flex items-center">
-        <div className="w-20 h-20 bg-yellow-400 rounded-full flex items-center justify-center shadow-md">
+        <div className="w-20 h-20 bg-gray-600 rounded-full flex items-center justify-center shadow-md">
           <Flame size={50} className="text-white" />
         </div>
         {/* Streak Count at Top Right */}
-        <div className="absolute -top-2 -right-2 bg-yellow-500 text-black px-3 py-1 rounded-full text-lg font-bold shadow-md">
+        <div className="absolute -top-3 -right-6 bg-yellow-500 text-black px-3 py-1 rounded-full text-lg font-bold shadow-md">
           {streak}🔥
         </div>
       </div>

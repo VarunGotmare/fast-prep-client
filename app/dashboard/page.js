@@ -24,8 +24,8 @@ export default function Dashboard() {
   return (
     <div className="text-white min-h-screen px-6 py-10 flex flex-col">
       {/* Dashboard Title */}
-      <h2 className="text-4xl font-extrabold mb-8 text-gray-200 self-start ml-10">
-        Dashboard
+      <h2 className="text-4xl font-bold mb-10 text-gray-200 self-start ml-2">
+        Your prep for {user.exam}
       </h2>
 
       {/* Container for cards */}

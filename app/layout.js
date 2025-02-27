@@ -24,12 +24,12 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en" className="h-full">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased h-full w-full overflow-hidden`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased h-full w-full overflow-y-auto`}>
         <UserProvider>
-          {/* Ensures full height, no extra scroll issues */}
-          <div className="flex h-screen w-full bg-gray-900">
+          {/* Full-height container without scroll overflow issues */}
+          <div className="flex h-screen w-full bg-gray-900 overflow-hidden">
             {showSidebar && <Sidebar />}
-            <main className={`flex-1 p-6 ${showSidebar ? "ml-60" : ""} overflow-y-auto h-full`}>
+            <main className={`flex-1 ${showSidebar ? "ml-60" : ""} h-full overflow-y-auto`}>
               {children}
             </main>
           </div>

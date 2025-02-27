@@ -2,7 +2,7 @@ export const subjectData = {
     Mathematics: [
       { chapter: "Sets and Relations", weightage: 3.0, priority: 5, sequence: 1 },
       { chapter: "Functions", weightage: 5.5, priority: 8, sequence: 2 },
-      { chapter: "Trigonometric Ratios & Identities", weightage: 1.1, priority: 3, sequence: 3 },
+      { chapter: "Trigonometric Ratios and Identities", weightage: 1.1, priority: 3, sequence: 3 },
       { chapter: "Inverse Trigonometric Functions", weightage: 1.9, priority: 4, sequence: 4 },
       { chapter: "Trigonometric Equations", weightage: 1.7, priority: 4, sequence: 5 },
       { chapter: "Quadratic Equation", weightage: 3.5, priority: 6, sequence: 6 },

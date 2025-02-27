@@ -1,11 +1,11 @@
 "use client";
 import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import {UserContext} from "@/context/UserContext";
+import { UserContext } from "@/context/UserContext";
 import Image from "next/image";
 
 export default function Home() {
-  const { user } = useContext(UserContext);
+  const { user, logout } = useContext(UserContext);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
@@ -22,55 +22,37 @@ export default function Home() {
   if (loading) return <p className="text-center mt-10">Loading...</p>;
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <h1 className="text-2xl font-bold">Welcome to Your Dashboard</h1>
-        <p>Hello, {user?.username || "User"}! You are successfully logged in.</p>
-        
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-        </div>
-      </main>
+    <div className="flex flex-col items-center justify-center min-h-screen p-8 gap-8 sm:p-20 bg-gray-100 dark:bg-gray-900 text-center">
+      <Image
+        src="/ai-tutor-logo.svg" // Replace with your actual logo
+        alt="AI Tutor Logo"
+        width={200}
+        height={50}
+        priority
+        className="dark:invert"
+      />
 
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-      </footer>
+      <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">
+        Welcome to AI Tutor
+      </h1>
+
+      <p className="text-lg text-gray-600 dark:text-gray-300">
+        Your personalized AI-powered learning platform for JEE & NEET.
+      </p>
+
+      <button
+        className="px-6 py-3 bg-blue-600 text-white rounded-lg text-lg font-semibold shadow-lg hover:bg-blue-700 transition"
+        onClick={() => router.push("/dashboard")}
+      >
+        Start Learning
+      </button>
+
+      <button
+        className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 transition"
+        onClick={logout}
+      >
+        Logout
+      </button>
     </div>
   );
 }
