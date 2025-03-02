@@ -6,7 +6,9 @@ import { useRouter } from "next/navigation";
 import { MessageSquare } from "lucide-react";
 import StreakCard from "../components/StreakCard";
 import ProfileCard from "../components/ProfileCard";
-import ProgressCard from "../components/ProgressCard"; // Import ProgressCard
+import CircularProgress from "../components/ProgressCircle";
+import { Progress } from "rsuite";
+import ProgressCircle from "../components/ProgressCircle";
 
 export default function Dashboard() {
   const { user, loading } = useUser();
@@ -37,11 +39,11 @@ export default function Dashboard() {
         </div>
 
         {/* Second Row: Progress Card (Full Width) */}
-        <ProgressCard
-          progress={
-            {maths: { completed: 4, total: 10 }}
-          }
-        />
+        {/* <ProgressCircle />
+         */}
+         <div className=''>
+    <Progress.Circle className="w-32" strokeColor="#ffc107" trailColor="#222423" percent={30} />
+  </div>
         
       </div>
 

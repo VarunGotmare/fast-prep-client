@@ -2,37 +2,38 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Paperclip, Send } from "lucide-react";
+import { Send } from "lucide-react";
 
 export default function ChatPage() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-  const [file, setFile] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [fileType, setFileType] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const sendMessage = async () => {
-    if (!input.trim() && !file) return;
+    if (!input.trim()) return;
 
-    const newMessage = { text: input, file, sender: "user" };
-    setMessages([...messages, newMessage]);
-
+    const userMessage = { text: input, sender: "user" };
+    setMessages((prev) => [...prev, userMessage]);
     setInput("");
-    setFile(null);
+    setIsLoading(true);
 
-    // Send to AI API (Implement API call here)
-    const response = await fetch("/api/chat", {
-      method: "POST",
-      body: JSON.stringify({ message: input, file }),
-    });
+    try {
+      const response = await fetch("/api/doubt-solver", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: input }),
+      });
 
-    const botReply = await response.json();
-    setMessages((prev) => [...prev, { text: botReply.result, sender: "bot" }]);
-  };
+      const botReply = await response.json();
+      const aiMessage = { text: botReply.result || "🤖 No response", sender: "bot" };
 
-  const handleFileSelect = (type) => {
-    setFileType(type);
-    setShowModal(false);
+      setMessages((prev) => [...prev, aiMessage]);
+    } catch (error) {
+      console.error("Error fetching AI response:", error);
+      setMessages((prev) => [...prev, { text: "❌ Error fetching response", sender: "bot" }]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -50,42 +51,15 @@ export default function ChatPage() {
               msg.sender === "user" ? "bg-blue-500 self-end" : "bg-gray-700"
             }`}
           >
-            {msg.file ? (
-              <img src={URL.createObjectURL(msg.file)} alt="Uploaded file" className="max-w-full rounded-lg" />
-            ) : (
-              <p>{msg.text}</p>
-            )}
+            <p>{msg.text}</p>
           </motion.div>
         ))}
+
+        {isLoading && <p className="text-gray-400">🤖 Thinking...</p>}
       </div>
 
       {/* Chat Input */}
       <div className="flex items-center gap-3 py-3">
-        <label className="cursor-pointer" onClick={() => setShowModal(true)}>
-          <Paperclip size={24} className="text-gray-400" />
-        </label>
-
-        {/* Modal for file upload options */}
-        {showModal && (
-          <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-            <div className="bg-gray-800 p-6 rounded-lg">
-              <h3 className="text-xl mb-4 text-white">Choose File Type</h3>
-              <button
-                onClick={() => handleFileSelect("image")}
-                className="bg-blue-500 px-4 py-2 rounded-lg text-white mb-2 w-full"
-              >
-                Upload Image
-              </button>
-              <button
-                onClick={() => handleFileSelect("pdf")}
-                className="bg-green-500 px-4 py-2 rounded-lg text-white w-full"
-              >
-                Upload PDF
-              </button>
-            </div>
-          </div>
-        )}
-
         <input
           type="text"
           value={input}
@@ -97,17 +71,6 @@ export default function ChatPage() {
           <Send size={26} />
         </button>
       </div>
-
-      {/* File Input */}
-      {fileType && (
-        <input
-          type="file"
-          accept={fileType === "image" ? "image/*" : "application/pdf"}
-          className="hidden"
-          onChange={(e) => setFile(e.target.files[0])}
-          key={fileType}  // This ensures the input is reset when fileType changes
-        />
-      )}
     </div>
   );
 }
