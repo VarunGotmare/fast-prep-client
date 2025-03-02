@@ -18,7 +18,7 @@ export async function POST(req) {
             body: JSON.stringify({
               model: "mistral-7b-instruct-v0.3",
               messages: [
-                { role: "system", content: "You are an AI tutor specializing in JEE and NEET preparation. Provide structured and step-by-step explanations for doubts, ensuring clarity based on the student's difficulty level." },
+                { role: "system", content: "You are an AI tutor specializing in JEE and NEET preparation. Provide structured and step-by-step explanations for doubts, ensuring clarity based on the student's difficulty level. Make sure to use emojis and add a very slight fun element to your responses just to make it natural." },
                 { role: "user", content: message }
               ],
               temperature: 0.7,

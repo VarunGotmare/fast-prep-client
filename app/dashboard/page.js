@@ -6,9 +6,7 @@ import { useRouter } from "next/navigation";
 import { MessageSquare } from "lucide-react";
 import StreakCard from "../components/StreakCard";
 import ProfileCard from "../components/ProfileCard";
-import CircularProgress from "../components/ProgressCircle";
 import { Progress } from "rsuite";
-import ProgressCircle from "../components/ProgressCircle";
 
 export default function Dashboard() {
   const { user, loading } = useUser();

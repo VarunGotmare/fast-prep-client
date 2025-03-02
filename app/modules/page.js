@@ -10,7 +10,6 @@ export default function ModulesPage() {
   const [sortBy, setSortBy] = useState("sequence"); // Default sorting method
   const router = useRouter();
 
-  // Sorting logic based on selection
   const sortModules = (modules) => {
     return [...modules].sort((a, b) => {
       if (sortBy === "sequence") return a.sequence - b.sequence;
@@ -20,9 +19,10 @@ export default function ModulesPage() {
   };
 
   return (
-    <div className="text-white min-h-screen px-6 py-10 flex flex-col relative">
-      <h2 className="text-4xl font-extrabold mb-8 text-gray-200 self-start ml-10">
-        Modules
+    <div className="text-white min-h-screen px-6 py-10 flex flex-col">
+      {/* Page Title */}
+      <h2 className="text-4xl font-bold mb-10 text-gray-200 self-start ml-2">
+        Select Your Modules
       </h2>
 
       {/* Subject Selection */}
@@ -33,7 +33,7 @@ export default function ModulesPage() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.3 }}
-            className={`px-5 py-3 rounded-xl font-semibold transition text-lg ${
+            className={`px-6 py-3 rounded-xl font-semibold text-lg transition ${
               selectedSubject === subject
                 ? "bg-blue-600 hover:bg-blue-700"
                 : "bg-gray-700 hover:bg-gray-600"
@@ -45,7 +45,7 @@ export default function ModulesPage() {
         ))}
       </div>
 
-      {/* Sort Dropdown */}
+      {/* Sorting Options */}
       {selectedSubject && (
         <div className="mb-6">
           <label className="text-lg font-semibold mr-2">Sort by:</label>
@@ -67,16 +67,16 @@ export default function ModulesPage() {
       )}
 
       {selectedSubject && subjectData[selectedSubject] && (
-        <div className="mt-6">
+        <div className="mt-6 w-full max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold mb-6">{selectedSubject} Modules</h2>
-          <ul className="space-y-4">
+          <ul className="space-y-6">
             {sortModules(subjectData[selectedSubject]).map((module) => (
               <motion.li
                 key={module.chapter}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3 }}
-                className="p-6 border rounded-2xl flex justify-between items-center bg-gray-800 shadow-lg"
+                className="p-6 border border-gray-700 rounded-2xl flex justify-between items-center bg-gray-800 shadow-lg"
               >
                 <div>
                   <span className="text-xl font-semibold">{module.chapter}</span>
