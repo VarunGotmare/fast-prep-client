@@ -24,15 +24,40 @@ export default function ChatPage() {
         body: JSON.stringify({ message: input }),
       });
 
-      const botReply = await response.json();
-      const aiMessage = { text: botReply.result || "🤖 No response", sender: "bot" };
+      if (!response.body) {
+        throw new Error("Empty response body");
+      }
 
-      setMessages((prev) => [...prev, aiMessage]);
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let botReply = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+
+        botReply += chunk;
+
+        setMessages((prev) => [
+          ...prev.filter((msg) => msg.sender !== "bot"),
+          { text: botReply, sender: "bot" },
+        ]);
+      }
     } catch (error) {
       console.error("Error fetching AI response:", error);
       setMessages((prev) => [...prev, { text: "❌ Error fetching response", sender: "bot" }]);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // ✅ Handle "Enter" key to send message
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && !isLoading) {
+      e.preventDefault(); // Prevents new line in input field
+      sendMessage();
     }
   };
 
@@ -64,10 +89,15 @@ export default function ChatPage() {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyPress} // ✅ Listen for "Enter" key
           placeholder="Ask a question..."
           className="flex-1 p-3 bg-gray-700 rounded-lg text-white outline-none"
         />
-        <button onClick={sendMessage} className="bg-purple-600 px-4 py-2 rounded-lg flex items-center">
+        <button
+          onClick={sendMessage}
+          className="bg-purple-600 px-4 py-2 rounded-lg flex items-center"
+          disabled={isLoading}
+        >
           <Send size={26} />
         </button>
       </div>
