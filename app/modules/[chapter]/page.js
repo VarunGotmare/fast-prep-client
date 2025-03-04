@@ -15,6 +15,7 @@ export default function ModulePage() {
   const [hasStartedGenerating, setHasStartedGenerating] = useState(false);
   const bottomRef = useRef(null); // 🔥 Reference to the bottom of content
 
+  // Fetch study material
   useEffect(() => {
     async function fetchStudyMaterial() {
       setIsLoading(true);
@@ -57,6 +58,23 @@ export default function ModulePage() {
     fetchStudyMaterial();
   }, [formattedChapter]);
 
+  // Fetch completion status
+  useEffect(() => {
+    async function checkCompletionStatus() {
+      try {
+        const response = await fetch("/api/get-progress");
+        const data = await response.json();
+        if (data.completedChapters.includes(formattedChapter)) {
+          setIsCompleted(true);
+        }
+      } catch (error) {
+        console.error("Error fetching progress:", error);
+      }
+    }
+
+    checkCompletionStatus();
+  }, [formattedChapter]);
+
   useEffect(() => {
     // 🔥 Scroll to bottom whenever content updates
     if (bottomRef.current) {
@@ -64,8 +82,21 @@ export default function ModulePage() {
     }
   }, [content]);
 
-  const handleMarkComplete = () => {
-    setIsCompleted(true);
+  const handleMarkComplete = async () => {
+    try {
+      const response = await fetch("/api/mark-complete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chapter: formattedChapter }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setIsCompleted(true);
+      }
+    } catch (error) {
+      console.error("Error marking completion:", error);
+    }
   };
 
   const handleCloseModule = () => {
@@ -101,7 +132,7 @@ export default function ModulePage() {
             ul: ({ node, ...props }) => <ul className="list-disc list-inside space-y-2" {...props} />,
             ol: ({ node, ...props }) => <ol className="list-decimal list-inside space-y-2" {...props} />,
             li: ({ node, ...props }) => (
-              <li className="align-baseline ml-4" {...props} /> // 🔥 Fix applied here!
+              <li className="align-baseline ml-4" {...props} />
             ),
             strong: ({ node, ...props }) => <strong className="font-bold text-yellow-300" {...props} />,
             code: ({ node, ...props }) => (
@@ -111,15 +142,15 @@ export default function ModulePage() {
         >
           {content}
         </ReactMarkdown>
-        <div ref={bottomRef} /> {/* 🔥 Scroll target */}
+        <div ref={bottomRef} />
       </div>
 
       {/* Floating Mark as Completed Button */}
       <motion.button
         onClick={handleMarkComplete}
-        whileTap={{ scale: 0.9 }} // Click feedback
-        whileHover={{ scale: 1.1 }} // Hover bounce
-        animate={isCompleted ? { scale: 1.2 } : { scale: 1 }} // Single keyframe fix
+        whileTap={{ scale: 0.9 }}
+        whileHover={{ scale: 1.1 }}
+        animate={isCompleted ? { scale: 1.2 } : { scale: 1 }}
         transition={{ type: "spring", stiffness: 200 }}
         className={`fixed bottom-6 right-6 px-6 py-3 text-lg font-semibold rounded-full transition-all shadow-lg ${
           isCompleted ? "bg-green-600 text-white cursor-default" : "bg-purple-600 hover:bg-purple-700 text-white"

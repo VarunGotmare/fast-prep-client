@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, BookOpen, ClipboardList } from "lucide-react";
-import { MessageSquare } from "lucide-react";
+import { LayoutDashboard, BookOpen, ClipboardList, MessageSquare } from "lucide-react";
+import { Inconsolata } from "next/font/google";
 
+// Import Inconsolata font
+const inconsolata = Inconsolata({ subsets: ["latin"] });
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -13,12 +15,13 @@ export default function Sidebar() {
     { name: "Dashboard", href: "/dashboard", icon: <LayoutDashboard size={20} /> },
     { name: "Modules", href: "/modules", icon: <BookOpen size={20} /> },
     { name: "Quizzes", href: "/quizzes", icon: <ClipboardList size={20} /> },
-    { name: "Chat", href: "/chat", icon: <MessageSquare size={20} /> }, // Added Chat link
+    { name: "Chat", href: "/chat", icon: <MessageSquare size={20} /> },
   ];
 
   return (
     <div className="h-screen w-60 bg-gray-950 text-white flex flex-col p-4 fixed overflow-y-auto">
-      <h2 className="text-2xl font-bold mb-6">fastprep</h2>
+      {/* Apply Inconsolata font */}
+      <h2 className={`${inconsolata.className} text-3xl ml-2 font-bold mb-4`}>fastprep</h2>
       <nav className="flex flex-col space-y-4">
         {links.map((link) => (
           <Link
